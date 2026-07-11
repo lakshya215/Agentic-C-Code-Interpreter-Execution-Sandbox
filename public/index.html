@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic C++ Code Interpreter Chatbot</title>
+  <!-- Google Fonts: Outfit & Fira Code (for terminal code blocks) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons (lightweight and beautiful icons) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Link CSS -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Ambient background glow blobs -->
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+  <div class="glow-blob blob-3"></div>
+
+  <div class="app-container">
+    <!-- Sidebar: Configuration & Status -->
+    <aside class="sidebar glass-panel">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i data-lucide="cpu" class="neon-text"></i>
+          <h1>Code Interpreter</h1>
+        </div>
+        <span class="badge neon-border">Sandbox v1.0</span>
+      </div>
+
+      <hr class="separator">
+
+      <!-- Status Indicators -->
+      <div class="sidebar-section">
+        <h3>System Status</h3>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-dot online" id="server-status-dot"></span>
+            <span class="status-label">Backend Server</span>
+          </div>
+          <div class="status-item">
+            <span class="status-dot online" id="compiler-status-dot"></span>
+            <span class="status-label">g++ Compiler</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="separator">
+
+      <!-- LLM Configuration Form -->
+      <div class="sidebar-section">
+        <h3>LLM Provider Settings</h3>
+        
+        <div class="form-group">
+          <label for="provider-select">Provider</label>
+          <div class="select-wrapper">
+            <select id="provider-select">
+              <option value="gemini" selected>Google Gemini</option>
+              <option value="openai">OpenAI GPT</option>
+              <option value="anthropic">Anthropic Claude</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="model-select">Model Selection</label>
+          <div class="select-wrapper">
+            <select id="model-select">
+              <!-- Dynamically populated -->
+            </select>
+            <i data-lucide="chevron-down" class="select-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="api-key-input">API Key Configuration</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="api-key-input" placeholder="Configure API Key...">
+            <button type="button" id="toggle-key-visibility" class="icon-btn">
+              <i data-lucide="eye" id="eye-icon"></i>
+            </button>
+          </div>
+          <span class="help-text">Keys are saved locally in your browser storage.</span>
+        </div>
+      </div>
+
+      <hr class="separator">
+
+      <!-- Quick Templates -->
+      <div class="sidebar-section">
+        <h3>Quick Demos</h3>
+        <div class="demo-buttons">
+          <button class="demo-btn" data-query="Calculate the 40th Fibonacci number using C++.">
+            <i data-lucide="sigma"></i> Fibonacci 40th
+          </button>
+          <button class="demo-btn" data-query="Simulate Pi using Monte Carlo method with 2,000,000 random coordinates. Print only Pi.">
+            <i data-lucide="dices"></i> Monte Carlo Pi
+          </button>
+          <button class="demo-btn" data-query="Write an infinite while(true) loop in C++ that prints 'Running' on every iteration. This should trigger the execution timeout.">
+            <i data-lucide="clock"></i> Infinite Loop (Timeout)
+          </button>
+          <button class="demo-btn" data-query="Compute the sum of primes below 1,000,000 using Sieve of Eratosthenes.">
+            <i data-lucide="binary"></i> Sum of Primes
+          </button>
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <p>Built with Node.js &amp; MSYS2 g++</p>
+      </div>
+    </aside>
+
+    <!-- Main Chat Window -->
+    <main class="chat-wrapper">
+      <!-- Chat Header -->
+      <header class="chat-header glass-panel">
+        <div class="header-info">
+          <h2>Agentic Execution Loop</h2>
+          <p id="current-config-summary">Model: Gemini Flash Latest</p>
+        </div>
+        <div class="header-actions">
+          <button id="clear-chat-btn" class="action-btn" title="Clear Chat History">
+            <i data-lucide="trash-2"></i>
+            <span>Clear Chat</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat Message Log -->
+      <section class="chat-history" id="chat-history">
+        <!-- System Welcome Message -->
+        <div class="chat-bubble assistant-bubble welcome-bubble glass-panel">
+          <div class="bubble-header">
+            <div class="avatar neon-bg"><i data-lucide="bot"></i></div>
+            <div class="sender-info">
+              <span class="sender-name">System Orchestrator</span>
+              <span class="timestamp">System</span>
+            </div>
+          </div>
+          <div class="bubble-content">
+            <p>Welcome! I am an <strong>Agentic C++ Code Interpreter Chatbot</strong>. Unlike standard LLMs that guess mathematical solutions, I write standalone C++ scripts, compile them using MSYS2 <code>g++</code>, and execute them in a local secure loop with a <strong>2000ms timeout boundary</strong> to resolve complex queries deterministically.</p>
+            <p>Ask me to simulate algorithms, do prime counting, perform mathematical computations, or test loop timeouts!</p>
+            <div class="features-grid">
+              <div class="feature-item">
+                <i data-lucide="code-2" class="neon-text"></i>
+                <div>
+                  <h4>C++ Sandbox</h4>
+                  <p>Raw performance with native MSYS2 compilation.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="shield-check" class="neon-text"></i>
+                <div>
+                  <h4>Timeout Protection</h4>
+                  <p>Infinite loops are terminated at exactly 2000ms.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <i data-lucide="terminal" class="neon-text"></i>
+                <div>
+                  <h4>Detailed Trace</h4>
+                  <p>Explore code, compiler output, and terminal console logs.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chat Input Console -->
+      <footer class="input-panel glass-panel">
+        <!-- Floating loading indicator -->
+        <div class="orchestrator-status-panel hidden" id="orchestrator-status">
+          <div class="status-spinner-wrapper">
+            <div class="status-spinner"></div>
+          </div>
+          <div class="status-text-container">
+            <span class="status-main-text" id="status-main-text">Thinking...</span>
+            <span class="status-sub-text" id="status-sub-text">Querying LLM for code formulation...</span>
+          </div>
+        </div>
+
+        <form class="input-form" id="chat-form">
+          <textarea 
+            id="chat-input" 
+            placeholder="Ask a computation or algorithmic query... (e.g. Estimate Pi using Monte Carlo simulation)" 
+            rows="1"
+            required
+          ></textarea>
+          <div class="input-actions">
+            <button type="submit" class="submit-btn" id="submit-btn">
+              <i data-lucide="send"></i>
+            </button>
+          </div>
+        </form>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Lucide Icon Initialization -->
+  <script>
+    // Initialize icons immediately. 
+    // They will also be called inside app.js if elements are injected dynamically.
+    lucide.createIcons();
+  </script>
+  <!-- Link JS -->
+  <script src="app.js"></script>
+</body>
+</html>
