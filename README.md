@@ -17,9 +17,3 @@ This project bridges the gap between high-level LLM reasoning and low-level dete
 * **AI Integration:** Google Gemini API (`gemini-flash-latest`)
 * **Frontend:** HTML5, CSS3 (Glassmorphism), Vanilla JS
 
-## ⚙️ Local Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/lakshya215/Agentic-C-Code-Interpreter-Execution-Sandbox.git
-cd Agentic-C-Code-Interpreter-Execution-Sandbox
